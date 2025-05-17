@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+pymongo
+python-jose
+python-dotenv
+requests
+python-multipart
+gridfs
+jwt
