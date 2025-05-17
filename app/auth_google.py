@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-import jwt
+import jwt  # Assure-toi que c'est bien le module PyJWT installé
 import os
 import requests
 
@@ -33,10 +33,15 @@ def auth_google(payload: GoogleToken):
     if not email:
         raise HTTPException(status_code=400, detail="Email non trouvé dans token")
 
-    jwt_token = jwt.encode({"email": email}, JWT_SECRET, algorithm="HS256")
+    try:
+        jwt_token = jwt.encode({"email": email}, JWT_SECRET, algorithm="HS256")
+        if isinstance(jwt_token, bytes):
+            jwt_token = jwt_token.decode("utf-8")
+    except Exception as e:
+        print("❌ Erreur génération JWT:", str(e))
+        raise HTTPException(status_code=500, detail="Erreur création JWT")
 
     return {
         "token": jwt_token,
-        "email": email,
-        "user_id": email
+        "email": email
     }
