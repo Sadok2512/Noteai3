@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-import jwt  # Assure-toi que c'est bien le module PyJWT installé
+import jwt
 import os
 import requests
 
@@ -43,5 +43,6 @@ def auth_google(payload: GoogleToken):
 
     return {
         "token": jwt_token,
-        "email": email
+        "email": email,
+        "user_id": email  # utiliser l'email comme identifiant pour le frontend
     }
