@@ -1,9 +1,7 @@
 fastapi
 uvicorn
 pymongo
-python-jose
-python-dotenv
-requests
 python-multipart
-
-jwt
+requests
+python-dotenv
+PyJWT
