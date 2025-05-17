@@ -11,7 +11,7 @@ import app.history as history
 import app.upload_audio as upload_audio
 import app.process_summary as process_summary
 
-# Lecture URI Mongo
+# MongoDB connection
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
 client = MongoClient(MONGO_URI)
 db = client["noteai"]
@@ -20,6 +20,7 @@ app = FastAPI(title="NoteAI Backend")
 
 origins = [
     "https://noteai-205095.netlify.app",
+    "https://noteai3-production.up.railway.app",
     "http://localhost:3000"
 ]
 
@@ -31,7 +32,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include routes
+# Routes
 app.include_router(auth.router, prefix="/auth")
 app.include_router(transcribe.router)
 app.include_router(auth_verify.router)
