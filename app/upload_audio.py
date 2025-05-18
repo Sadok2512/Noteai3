@@ -42,10 +42,13 @@ async def upload_audio(
         # Sauvegarde dans GridFS
         audio_id = fs.put(file.file, filename=stored_as, content_type=file.content_type)
 
+        # Choisir le bon nom à enregistrer
+        final_filename = custom_name if custom_name else file.filename
+
         # Préparation du document MongoDB
         note_doc = {
             "stored_as": stored_as,
-            "filename": file.filename,
+            "filename": final_filename,
             "content_type": file.content_type,
             "size_bytes": size_bytes,
             "uploaded_at": datetime.datetime.utcnow().isoformat(),
