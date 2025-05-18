@@ -24,7 +24,16 @@ def transcribe_with_replicate(audio_bytes: bytes) -> str:
     # Upload vers file.io
     with open(temp_path, "rb") as f:
         res = requests.post("https://file.io", files={"file": f})
-        file_url = res.json().get("link")
+        try:
+    res_json = res.json()
+    print("🔗 file.io response:", res_json)
+except Exception as e:
+    print("❌ Erreur parsing JSON file.io:", res.text)
+    raise Exception("file.io a échoué : réponse invalide")
+
+file_url = res_json.get("link")
+if not file_url:
+    raise Exception("Lien file.io non trouvé dans la réponse")
 
     if not file_url:
         raise Exception("Échec de l'upload vers file.io")
