@@ -18,15 +18,10 @@ db = client["noteai"]
 
 app = FastAPI(title="NoteAI Backend")
 
-origins = [
-    "https://noteai-205095.netlify.app",
-    "https://noteai3-production.up.railway.app",
-    "http://localhost:3000"
-]
-
+# TEMP: Autoriser toutes les origines pour débogage
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],  # ⚠️ autorise tout pour test
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
