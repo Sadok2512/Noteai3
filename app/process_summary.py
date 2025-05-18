@@ -29,21 +29,17 @@ def transcribe_with_replicate(audio_bytes: bytes) -> str:
             print("🔗 file.io response:", res_json)
         except Exception as e:
             print("❌ Erreur parsing JSON file.io:", res.text)
-    raise Exception("file.io a échoué : réponse invalide")
+            raise Exception("file.io a échoué : réponse invalide")
 
-file_url = res_json.get("link")
-if not file_url:
-    raise Exception("Lien file.io non trouvé dans la réponse")
-
+    file_url = res_json.get("link")
     if not file_url:
-        raise Exception("Échec de l'upload vers file.io")
+        raise Exception("Lien file.io non trouvé dans la réponse")
 
     headers = {
         "Authorization": f"Token {os.environ['REPLICATE_API_TOKEN']}",
         "Content-Type": "application/json"
     }
 
-    # Démarrer la transcription
     start = requests.post(
         "https://api.replicate.com/v1/predictions",
         json={
@@ -52,10 +48,10 @@ if not file_url:
         },
         headers=headers
     )
+
     prediction = start.json()
     get_url = prediction.get("urls", {}).get("get")
 
-    # Polling jusqu'à succès
     for _ in range(30):
         poll = requests.get(get_url, headers=headers).json()
         if poll["status"] == "succeeded":
